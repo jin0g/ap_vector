@@ -82,3 +82,8 @@ ap_vector<4, 16> list2 = ap_vector<4, 16>(list1);
 ## Sample Code
 
 Sample code can be found in `main.cc`. It contains test code that covers the full functionality, so please refer to it for understanding the implementation details and usage.
+
+
+## Acknowledgements
+
+This project was created entirely with the help of ChatGPT.
