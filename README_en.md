@@ -1,6 +1,6 @@
 # ap_vector
 
-`ap_vector` is a class to handle arrays of `ap_int` with arbitrary bit widths.
+Introducing the `ap_vector` library, a powerful integer vector computation library designed for Vitis HLS. Featuring seamless bidirectional type conversion between wide ap_uint types and ap_vector types, ap_vector provides numpy-like arithmetic operations. With ap_vector, complicated loop descriptions for HLS become more convenient, and code readability is significantly improved. Start leveraging the power of ap_vector in your HLS projects today!
 
 ## Overview
 
