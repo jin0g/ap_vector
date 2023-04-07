@@ -73,6 +73,12 @@ ap_uint<32> result = list;
 ap_vector<4, 16> list2 = ap_vector<4, 16>(list1);
 ```
 
+
+## NOTE
+- ap_int cannot be cast bidirectionally with ap_vector, so it is recommended to use ap_uint instead.
+- Proper performance may not be achieved without using the appropriate #pragma directives.
+- In most cases, it is recommended to use ap_vector inside a #pragma HLS pipeline.
+
 ## Sample Code
 
-Sample code can be found in `main.cpp`. It contains test code that covers the full functionality, so please refer to it for understanding the implementation details and usage.
+Sample code can be found in `main.cc`. It contains test code that covers the full functionality, so please refer to it for understanding the implementation details and usage.
