@@ -85,23 +85,23 @@ int main() {
 
 // This is an example of synthesisable code for HLS
 // It is recommended to use this within a pipeline
-ap_uint<64> kernel(ap_uint<32> a, ap_uint<32> b, ap_uint<64> c, ap_uint<8> d) {
+void kernel(ap_uint<32> a[1000], ap_uint<32> b[1000], ap_uint<64> c[1000], ap_int<8> d[1000], ap_uint<64> result[1000]) {
+    for (int i = 0; i < 1000; ++i) {
 #pragma HLS pipeline
-    // Convert 'a' and 'b' into ap_vector<4, 8> types
-    ap_vector<4, 8> va = a;
-    ap_vector<4, 8> vb = b;
+        // Convert 'a' and 'b' into ap_vector<4, 8> types
+        ap_vector<4, 8> va = a[i];
+        ap_vector<4, 8> vb = b[i];
 
-    // Convert 'c' into ap_vector<4, 16> type
-    ap_vector<4, 16> vc = c;
+        // Convert 'c' into ap_vector<4, 16> type
+        ap_vector<4, 16> vc = c[i];
 
-    // Perform element-wise multiplication of 'va' and 'vb', then add 'vc'
-    ap_vector<4, 16> madd = va * vb + vc;
+        // Perform element-wise multiplication of 'va' and 'vb', then add 'vc'
+        ap_vector<4, 16> madd = va * vb + vc;
 
-    // Add constant 'd' to each element of the 'madd' ap_vector
-    ap_vector<4, 16> madd_const = madd + d;
+        // Add constant 'd' to each element of the 'madd' ap_vector
+        ap_vector<4, 16> madd_const = madd + d[i];
 
-    // Convert the result back to ap_uint<64>
-    ap_uint<64> result = madd_const;
-
-    return result;
+        // Convert the result back to ap_uint<64>
+        result[i] = madd_const;
+    }
 }
