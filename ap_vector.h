@@ -48,48 +48,6 @@ public:
     }
 };
 
-// Macro to define arithmetic and shift operations between ap_vector and constant values
-#define AP_CONST_OP(OP) \
-template <unsigned LENGTH, int _AP_W, bool _AP_S, typename T, typename std::enable_if<std::is_integral<T>::value>::type* = nullptr> \
-inline ap_vector<LENGTH, decltype(ap_int_base<_AP_W, _AP_S>() OP T())::width, _AP_S> operator OP(const ap_vector<LENGTH, _AP_W, _AP_S>& lhs, T rhs) { \
-    ap_vector<LENGTH, decltype(ap_int_base<_AP_W, _AP_S>() OP T())::width, _AP_S> result; \
-    for (int i = 0; i < LENGTH; ++i) { \
-        result[i] = lhs[i] OP rhs; \
-    } \
-    return result; \
-}
-
-AP_CONST_OP(+)
-AP_CONST_OP(-)
-AP_CONST_OP(*)
-AP_CONST_OP(/)
-AP_CONST_OP(%)
-AP_CONST_OP(<<)
-AP_CONST_OP(>>)
-
-#undef AP_CONST_OP
-
-// Arithmetic and shift operations between an ap_vector and an ap_int
-#define AP_INT_OP(OP) \
-template<unsigned LENGTH, int _AP_W, bool _AP_S, int RHS_AP_W, bool RHS_AP_S> \
-ap_vector<LENGTH, decltype(ap_int_base<_AP_W, _AP_S>() OP ap_int_base<RHS_AP_W, RHS_AP_S>())::width, _AP_S> operator OP(const ap_vector<LENGTH, _AP_W, _AP_S> &lhs, const ap_int_base<RHS_AP_W, RHS_AP_S> &rhs) { \
-    ap_vector<LENGTH, decltype(ap_int_base<_AP_W, _AP_S>() OP ap_int_base<RHS_AP_W, RHS_AP_S>())::width, _AP_S> result; \
-    for (int i = 0; i < LENGTH; ++i) { \
-        result[i] = lhs[i] OP rhs; \
-    } \
-    return result; \
-}
-
-AP_INT_OP(+)
-AP_INT_OP(-)
-AP_INT_OP(*)
-AP_INT_OP(/)
-AP_INT_OP(%)
-AP_INT_OP(<<)
-AP_INT_OP(>>)
-
-#undef AP_INT_OP
-
 // Arithmetic and shift operations between ap_vectors
 #define AP_VECTOR_OP(OP) \
 template<unsigned LENGTH, int _AP_W, bool _AP_S, int RHS_AP_W, bool RHS_AP_S> \
@@ -110,3 +68,24 @@ AP_VECTOR_OP(<<)
 AP_VECTOR_OP(>>)
 
 #undef AP_VECTOR_OP
+
+// Macro to define arithmetic and shift operations between ap_vector and constant values
+#define AP_INT_OP(OP) \
+template <unsigned LENGTH, int _AP_W, bool _AP_S, typename T> \
+inline ap_vector<LENGTH, decltype(ap_int_base<_AP_W, _AP_S>() OP T())::width, _AP_S> operator OP(const ap_vector<LENGTH, _AP_W, _AP_S>& lhs, T rhs) { \
+    ap_vector<LENGTH, decltype(ap_int_base<_AP_W, _AP_S>() OP T())::width, _AP_S> result; \
+    for (int i = 0; i < LENGTH; ++i) { \
+        result[i] = lhs[i] OP rhs; \
+    } \
+    return result; \
+}
+
+AP_INT_OP(+)
+AP_INT_OP(-)
+AP_INT_OP(*)
+AP_INT_OP(/)
+AP_INT_OP(%)
+AP_INT_OP(<<)
+AP_INT_OP(>>)
+
+#undef AP_INT_OP

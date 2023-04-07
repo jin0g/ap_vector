@@ -2,6 +2,7 @@
 #include "ap_int.h"
 #include "ap_vector.h"
 
+
 int main() {
     // Create ap_vector from an ap_uint value
     // Initialize ap_uint<32> value1 with 0x12345678
@@ -50,8 +51,16 @@ int main() {
     auto list_add = list1 + list2;
     auto list_sub = list1 - list2;
     auto list_mul = list1 * list2;
-    auto list_shl = list1 << 1;
-    auto list_shr = list1 >> 1;
+    auto list_shl = list1 << list2;
+    auto list_shr = list1 >> list2;
+
+    ap_int<10> value = 1234;
+    auto list_int_add = list1 + value;
+    auto list_int_sub = list1 - value;
+    auto list_int_mul = list1 * value;
+    auto list_int_shl = list1 << value;
+    auto list_int_shr = list1 >> value;
+
 
     auto list_const_add = list1 + 2;
     auto list_const_sub = list1 - 2;
@@ -71,4 +80,28 @@ int main() {
     std::cout << std::endl;
 
     return 0;
+}
+
+
+// This is an example of synthesisable code for HLS
+// It is recommended to use this within a pipeline
+ap_uint<64> kernel(ap_uint<32> a, ap_uint<32> b, ap_uint<64> c, ap_uint<8> d) {
+#pragma HLS pipeline
+    // Convert 'a' and 'b' into ap_vector<4, 8> types
+    ap_vector<4, 8> va = a;
+    ap_vector<4, 8> vb = b;
+
+    // Convert 'c' into ap_vector<4, 16> type
+    ap_vector<4, 16> vc = c;
+
+    // Perform element-wise multiplication of 'va' and 'vb', then add 'vc'
+    ap_vector<4, 16> madd = va * vb + vc;
+
+    // Add constant 'd' to each element of the 'madd' ap_vector
+    ap_vector<4, 16> madd_const = madd + d;
+
+    // Convert the result back to ap_uint<64>
+    ap_uint<64> result = madd_const;
+
+    return result;
 }
